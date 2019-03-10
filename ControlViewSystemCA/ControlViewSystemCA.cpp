@@ -5,6 +5,10 @@
 #include "File.h"
 #include <vector>
 
+
+std::string get_chars_tree(int depth);
+void print_tree(std::vector<element*> pwd, int depth);
+
 int main()
 {
 	std::vector<element*> root;
@@ -17,20 +21,20 @@ int main()
 	root[0]->list_of_elements.push_back(new directory("fix0987", root[0]));
 	root[0]->list_of_elements[2]->list_of_elements.push_back(new file("project.cpp", root[0]->list_of_elements[2]));
 	root[0]->list_of_elements[2]->list_of_elements.push_back(new file("readme.txt", root[0]->list_of_elements[2]));
-	root[0]->list_of_elements.push_back(new directory("testDir", root[0]));
+	//root[0]->list_of_elements.push_back(new directory("testDir", root[0]));
 
 	auto tmp_root = root[0];
-	auto current_path = root[0]->name;
+	auto pwd = root[0]->name;
 	while (true)
 	{
-		std::cout << current_path << ": ";
+		std::cout << pwd << ": ";
 		std::string cmd;
 		std::getline(std::cin, cmd);
 		if (cmd == "cmds")
 		{
-			std::cout << "cd\nedit\nls\nadd\ncmds";
+			std::cout << "1. cd\n2. edit\n3. ls\n4. add\n5. cmds\n6. exit\n7. touch\n";
 			continue;
-		}
+		} //update if add some features
 		if (cmd == "cd")
 		{
 			std::string dir;
@@ -40,9 +44,9 @@ int main()
 			{
 				try
 				{
-					//std::string tmp_name = tmp_root->prev_node->name;
-					//auto isdasd = current_path.rfind();
-					//tmp_root = tmp_root->prev_node->list_of_elements;
+					//int tmp_data = ;
+					pwd = pwd.erase(pwd.rfind(tmp_root->name), tmp_root->name.length() + 1);
+					tmp_root = tmp_root->prev_node;
 					continue;
 				}
 				catch (...)
@@ -53,7 +57,7 @@ int main()
 			if (dir.empty())
 			{
 				tmp_root = root[0];
-				current_path = "/";
+				pwd = "/";
 				continue;
 			}
 			auto ind = 0;
@@ -68,9 +72,9 @@ int main()
 					break;
 			}
 			try
-			{				
+			{
 				tmp_root = tmp_root->list_of_elements[ind];
-				current_path += tmp_root->name + "/";
+				pwd += tmp_root->name + "/";
 				continue;
 			}
 			catch (...)
@@ -78,7 +82,7 @@ int main()
 				std::cout << "invalid dir name";
 			}
 
-		}
+		}//i guess it's all
 		if (cmd == "edit")
 		{
 
@@ -102,16 +106,45 @@ int main()
 				continue;
 			}
 		}
-		if (cmd == "ls")
+		if (cmd == "ls") //Need to update with version
 		{
-
+			print_tree(tmp_root->list_of_elements, 0);
+			continue;
 		}
-		else
+		if (cmd == "exit")
 		{
-			std::cout << "Invalid command!\n";
+			break;
 		}
-
+		std::cout << "Invalid command!\n";
 	}
 
 	return 0;
+}
+
+void print_tree(std::vector<element*> pwd, int depth)
+{
+	for (auto element : pwd)
+	{
+		switch (element->type)
+		{
+		case directory_type:
+			std::cout << get_chars_tree(depth) << element->name << " (d) \n";
+			break;
+		case file_type:
+			std::cout << get_chars_tree(depth) << element->name << " (file) \n";
+			break;
+		}
+
+		if (element->list_of_elements.capacity() != 0)
+		{
+			depth++;
+			print_tree(element->list_of_elements, depth);
+			depth--;
+		}
+	}
+}
+
+std::string get_chars_tree(const int depth)
+{
+	return std::string(depth * 2, '-');
 }

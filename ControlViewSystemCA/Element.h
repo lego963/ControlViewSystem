@@ -3,14 +3,17 @@
 #include <string>
 #include <vector>
 
+enum element_type { file_type, directory_type };
+
 class element
 {
 public:
+	element_type type;
 	element* prev_node;
 	std::string name;
 	std::time_t creation_time;
 	std::vector<element*> list_of_elements;
 	element();
-	explicit element(const std::string name);
+	explicit element(std::string name);
 	virtual ~element();
 };
