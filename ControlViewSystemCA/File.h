@@ -7,6 +7,6 @@ class file final :
 {
 public:
 	file();
-	explicit file(std::string name, element* prev_dir);
+	file(std::string name, directory* prev_dir);
 	virtual ~file();
 };

@@ -6,8 +6,9 @@ class directory final :
 	public element
 {
 public:
+	std::vector<element*> list_of_elements;
 	directory();
-	explicit directory(std::string name, element* prev_dir);
+	directory(std::string name, directory* prev_dir);
 	virtual ~directory();
 };
 
