@@ -1,11 +1,15 @@
 #pragma once
 #include <vector>
+#include <ctime>
+#include "CustomDate.h"
+#include <string>
 
-class Version
+class version
 {
 public:
-	std::vector<std::string> versions;
-
-	Version();
-	~Version();
+	std::string data;
+	CustomDate commit_date;
+	version();
+	version(const std::string& data, int d, int m, int y);
+	~version();
 };
